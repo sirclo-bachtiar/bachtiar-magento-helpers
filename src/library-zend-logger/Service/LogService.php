@@ -6,22 +6,18 @@ use Zend\Log\Writer\Stream;
 use Zend\Log\Logger;
 
 /**
- * Logging Activity Service Purpose
+ * Logging Activity Service
  *
  * :: how to use
  * => LogService::setChannel('default')->setMode('default')->setMessage('message_to_log')->log();
  *
- * :: setChannel
- * -> select channel (string), available [emerg, alert, crit, err, warn, notice, info],
- * if null then auto set to default.
+ * :: setChannel('default')
  *
- * :: setMode
- * -> select log mode (string), available [test, debug, develop],
- * if null then auto set to default.
+ * :: setMode('default')
  *
- * :: setMessage
- * -> set log message (string),
- * if null then auto set to default message
+ * :: setMessage('default')
+ * 
+ * :: log()
  */
 class LogService
 {
@@ -135,9 +131,13 @@ class LogService
 
     // ? Setter Module
     /**
-     * Set the value of channel
+     * Set value of channel.
+     * 
+     * -> select channel, available [ emerg, alert, crit, err, warn, notice, info ],
+     * if null then auto set to default.
      *
-     * @return  self
+     * @param string $channel
+     * @return self
      */
     public static function setChannel(string $channel = 'debug'): self
     {
@@ -147,9 +147,13 @@ class LogService
     }
 
     /**
-     * Set the value of mode
+     * Set value of mode.
+     * 
+     * -> select log mode, available [ test, debug, develop ],
+     * if null then auto set to default.
      *
-     * @return  self
+     * @param string $mode
+     * @return self
      */
     public static function setMode(string $mode = 'default'): self
     {
@@ -159,9 +163,13 @@ class LogService
     }
 
     /**
-     * Set the value of message
+     * Set value of message
+     * 
+     * -> set log message,
+     * if null then auto set to default message
      *
-     * @return  self
+     * @param string $message
+     * @return self
      */
     public static function setMessage(string $message = self::DEFAULT_MESSAGE): self
     {

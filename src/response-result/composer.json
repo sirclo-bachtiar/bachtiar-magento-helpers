@@ -1,0 +1,20 @@
+{
+    "name": "sirclo-bachtiar/response-result",
+    "description": "Response result helper",
+    "type": "library",
+    "authors": [
+        {
+            "name": "sirclo-bachtiar",
+            "email": "tio.bachtiar@sirclo.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Bachtiar\\Helper\\Response\\": ""
+        }
+    }
+}
