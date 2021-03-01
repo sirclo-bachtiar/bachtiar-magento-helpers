@@ -1,0 +1,24 @@
+{
+    "name": "sirclo-bachtiar/bachtiar-zend-magento2-helper",
+    "description": "Bachtiar Zend Magento2 Helper",
+    "version": "1.0.0",
+    "type": "library",
+    "authors": [
+        {
+            "name": "sirclo-bachtiar",
+            "email": "tio.bachtiar@sirclo.com"
+        }
+    ],
+    "homepage": "https://github.com/sirclo-bachtiar/bachtiar-zend-magento2-helpers",
+    "require": {},
+    "autoload": {
+        "files": [
+            "src/library-zend-logger/registration.php",
+            "src/response-result/registration.php"
+        ],
+        "psr-4": {
+            "Bachtiar\\Helper\\Zend\\Magento\\Logger\\": "src/library-zend-logger",
+            "Bachtiar\\Helper\\Response\\": "src/response-result"
+        }
+    }
+}
