@@ -1,8 +1,9 @@
 {
     "name": "sirclo-bachtiar/bachtiar-zend-magento2-helper",
     "description": "Bachtiar Zend Magento2 Helper",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "library",
+    "license": "GPL-3.0",
     "authors": [
         {
             "name": "sirclo-bachtiar",
@@ -10,7 +11,9 @@
         }
     ],
     "homepage": "https://github.com/sirclo-bachtiar/bachtiar-zend-magento2-helpers",
-    "require": {},
+    "require": {
+        "zendframework/zend-log": "^2.12"
+    },
     "autoload": {
         "files": [
             "src/library-zend-logger/registration.php",
