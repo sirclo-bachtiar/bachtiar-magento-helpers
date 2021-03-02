@@ -25,6 +25,13 @@ class LogService
     protected static $mode;
     protected static $message;
 
+    /**
+     * Change the value of BASE_DIR on line 34,
+     * adjust to the location where your logs are stored.
+     * you can use [ define() ] at [ autoload ] file,
+     * default [ dirname(__DIR__) ].
+     */
+    private const BASE_DIR = BP;
     private const LOCATION = '/var/log/';
     private const IDENTITY = 'bachtiar.';
     private const FILEFORMAT = '.log';
@@ -68,7 +75,7 @@ class LogService
      */
     private static function createNewLog(): void
     {
-        $writer = new Stream(dirname(__DIR__) . self::fileNameResolver());
+        $writer = new Stream(static::BASE_DIR . self::fileNameResolver());
 
         $logger = new Logger();
 
