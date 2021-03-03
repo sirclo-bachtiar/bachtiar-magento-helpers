@@ -57,7 +57,7 @@ class ResponseService
      * Set value status response.
      * 
      * -> status of response, available [ true, false ],
-     * if null then auto set to true
+     * if null then auto set to true.
      *
      * @param boolean $status
      * @return self
@@ -73,7 +73,7 @@ class ResponseService
      * Set value of data.
      * 
      * -> set data response value, ! must be an array,
-     * if null then will be set to an empty array
+     * if null then will be set to an empty array.
      *
      * @param array $data
      * @return self
@@ -88,8 +88,8 @@ class ResponseService
     /**
      * Set value of additional data.
      * 
-     * ->set config data from response result, ! must be an array,
-     * if null then will be set to an empty array
+     * -> set config data from response result, ! must be an array,
+     * if null then will be set to an empty array.
      *
      * @param array $dataAdd
      * @return self
@@ -105,7 +105,7 @@ class ResponseService
      * Set message of response.
      * 
      * -> set message from response result,
-     * if null then will be no any response message
+     * if null then will be no any response message.
      *
      * @param string $message
      * @return self

@@ -1,9 +1,9 @@
 <?php
 
-namespace Bachtiar\Helper\Zend\Magento\Logger\Service;
+namespace Bachtiar\Helper\Logger\Service;
 
-use Zend\Log\Writer\Stream;
-use Zend\Log\Logger;
+use Laminas\Log\Writer\Stream;
+use Laminas\Log\Logger;
 
 /**
  * Logging Activity Service
@@ -38,7 +38,7 @@ class LogService
 
     /**
      * Logger Priority.
-     * source -> https://framework.zend.com/blog/2017-09-12-zend-log.html
+     * source -> https://docs.laminas.dev/laminas-log/intro/#using-built-in-priorities
      */
     private const CHANNEL_EMERGENCY = 0;
     private const CHANNEL_ALERT = 1;
@@ -77,7 +77,7 @@ class LogService
     {
         $writer = new Stream(static::BASE_DIR . self::fileNameResolver());
 
-        $logger = new Logger();
+        $logger = new Logger;
 
         $logger->addWriter($writer)->log(self::channelResolver(), self::messageResolver());
     }
@@ -102,7 +102,12 @@ class LogService
             'debug' => static::CHANNEL_DEBUG
         ];
 
-        return $channelAvailable[$getChannel];
+        try {
+            return $channelAvailable[$getChannel];
+        } catch (\Throwable $th) {
+            echo $th->getMessage();
+            return $channelAvailable['debug'];
+        }
     }
 
     /**
@@ -131,7 +136,12 @@ class LogService
             'default' => static::FILE_DEFAULT
         ];
 
-        $modeResult = $modeAvailable[$getMode];
+        try {
+            $modeResult = $modeAvailable[$getMode];
+        } catch (\Throwable $th) {
+            echo $th->getMessage();
+            $modeResult = $modeAvailable['default'];
+        }
 
         return (string) static::LOCATION . static::IDENTITY . $modeResult . static::FILEFORMAT;
     }
@@ -173,7 +183,7 @@ class LogService
      * Set value of message
      * 
      * -> set log message,
-     * if null then auto set to default message
+     * if null then auto set to default message.
      *
      * @param string $message
      * @return self

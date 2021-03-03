@@ -1,6 +1,6 @@
 {
-    "name": "sirclo-bachtiar/library-zend-logger",
-    "description": "Log helper using zend for magento",
+    "name": "sirclo-bachtiar/library-logger",
+    "description": "Log helper for magento",
     "type": "library",
     "authors": [
         {
@@ -8,15 +8,12 @@
             "email": "tio.bachtiar@sirclo.com"
         }
     ],
-    "require": {
-        "zendframework/zend-log": "^2.12"
-    },
     "autoload": {
         "files": [
             "registration.php"
         ],
         "psr-4": {
-            "Bachtiar\\Helper\\Zend\\Magento\\Logger\\": ""
+            "Bachtiar\\Helper\\Logger\\": ""
         }
     }
 }
