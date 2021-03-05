@@ -1,7 +1,7 @@
 {
     "name": "sirclo-bachtiar/bachtiar-magento-helpers",
     "description": "Bachtiar Magento Helpers",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "type": "library",
     "license": "GPL-3.0",
     "authors": [
@@ -14,7 +14,8 @@
     "autoload": {
         "psr-4": {
             "Bachtiar\\Helper\\Logger\\": "src/library-logger",
-            "Bachtiar\\Helper\\Response\\": "src/service-response"
+            "Bachtiar\\Helper\\Response\\": "src/service-response",
+            "Bachtiar\\Helper\\DB\\Query\\": "src/db-query-generator"
         }
     },
     "require": {

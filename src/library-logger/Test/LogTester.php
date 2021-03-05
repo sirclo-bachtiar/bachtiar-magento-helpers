@@ -4,7 +4,7 @@ namespace Bachtiar\Helper\Logger\Test;
 
 use Bachtiar\Helper\Logger\Service\LogService;
 
-class LogTester
+class LogTest
 {
     public function __invoke()
     {
