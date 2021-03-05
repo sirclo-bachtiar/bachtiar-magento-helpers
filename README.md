@@ -79,7 +79,7 @@ class ResponseTest
 
 ```
 
-- ### Query Builder
+- ### Query Builder Service
 It's used for custom query builder. (return query only).
 ```bash
 use Bachtiar\Helper\DB\Query\Service\QueryBuilderService;
@@ -88,7 +88,7 @@ class QueryBuilderTest
 {
     public function QueryBuilder()
     {
-        return QueryBuilderService::select()->from('base_table')
+        return QueryBuilderService::select([])->from('base_table')
             ->join('relation_table', 'baseColumnId', '=', 'relationColumnId')
             ->where('base_table.name', '=', 'test')
             ->andWhere('base_table.age', '=', 'age')

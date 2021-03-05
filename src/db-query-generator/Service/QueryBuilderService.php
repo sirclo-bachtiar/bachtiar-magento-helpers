@@ -4,30 +4,31 @@ namespace Bachtiar\Helper\DB\Query\Service;
 
 /**
  * Simple Query Builder
- * 
+ *
  * :: how to use
- * => QueryBuilderService::select()->from('base_table')->join('relation_table', 'baseColumnId', '=', 'relationColumnId')->where('base_table.name', '=', 'test')->andWhere('base_table.age', '=', 'age')->orWhere('relation_table.address', 'like', '%ponorogo%')->get();
- * 
+ * => QueryBuilderService::select()->from('base_table')->join('relation_table', 'base_table.baseColumnId', '=', 'relationColumnId')->where('base_table.name', '=', 'test')->andWhere('base_table.age', '=', 'age')->orWhere('relation_table.address', 'like', '%ponorogo%')->get();
+ *
  * :: select([]) -> optional
- * 
+ *
  * :: from('base_table') -> ! must be included
- * 
- * :: join('relation_table', 'baseColumnId', '=', 'relationColumnId') -> optional
- * 
+ *
+ * :: join('relation_table', 'base_table.baseColumnId', '=', 'relationColumnId') -> optional
+ *
  * :: where('base_table.name', '=', 'test') -> optional
- * 
+ *
  * :: andWhere('base_table.age', '=', 'age') -> optional
- * 
+ *
  * :: orWhere('relation_table.address', 'like', '%ponorogo%') -> optional
- * 
+ *
  * :: get()
  */
 class QueryBuilderService
 {
-    private $select = "";
-    private $from = "";
-    private $join = "";
-    private $where = "";
+    private static $select = "";
+    private static $from = "";
+    private static $join = "";
+    private static $where = "";
+    private static $andOrWhere = "";
 
     // ? Public Methods
     public static function get()
@@ -38,10 +39,11 @@ class QueryBuilderService
     // ? Private Methods
     private static function buildQueryProcess()
     {
-        return (static::$select ?? "SELECT * ")
-            . " " . static::$from . " "
+        return (strlen(static::$select) ? static::$select : "SELECT * ")
+            . "FROM " . static::$from . " "
             . static::$join
-            . static::$where;
+            . static::$where
+            . static::$andOrWhere;
     }
 
     // ? Private Query Resolver
@@ -58,52 +60,41 @@ class QueryBuilderService
             $selectResult .= "*";
         }
 
-        return $selectResult;
+        return "$selectResult ";
     }
 
-    private static function innerJoinResolver(string $relationTable, string $baseId, string $sign = "=", string $relationId): string
+    private static function innerJoinResolver(string $relationTable, string $baseTableId, string $sign = "=", string $relationTableId): string
     {
-        $joinResult = " INNER JOIN $relationTable ON ";
+        $joinResult = "INNER JOIN $relationTable ON ";
 
-        $joinResult .= static::$from . ".$baseId $sign $relationTable.$relationId ";
+        $joinResult .= "$baseTableId $sign $relationTable.$relationTableId ";
 
         return $joinResult;
     }
 
     private static function whereResolver(string $column, string $sign, $value): string
     {
-        $whereResult = " WHERE ";
-
-        if (gettype($value) == "integer") {
-            $whereResult .= "$column $sign $value ";
-        } else {
-            $whereResult .= "$column $sign '$value' ";
-        }
-
-        return $whereResult;
+        return "WHERE " . self::whereValueResolver($column, $sign, $value);
     }
 
     private static function orWhereResolver(string $column, string $sign, $value): string
     {
-        $whereResult = " OR ";
-
-        if (gettype($value) == "integer") {
-            $whereResult .= "$column $sign $value ";
-        } else {
-            $whereResult .= "$column $sign '$value' ";
-        }
-
-        return $whereResult;
+        return "OR " . self::whereValueResolver($column, $sign, $value);
     }
 
     private static function andWhereResolver(string $column, string $sign, $value): string
     {
-        $whereResult = " AND ";
+        return "AND " . self::whereValueResolver($column, $sign, $value);
+    }
+
+    private static function whereValueResolver(string $column, string $sign, $value): string
+    {
+        $whereResult = " ";
 
         if (gettype($value) == "integer") {
-            $whereResult .= "$column $sign $value ";
+            $whereResult = "$column $sign $value ";
         } else {
-            $whereResult .= "$column $sign '$value' ";
+            $whereResult = "$column $sign '$value' ";
         }
 
         return $whereResult;
@@ -112,7 +103,7 @@ class QueryBuilderService
     // ? Setter Module
     /**
      * Set select columns
-     * 
+     *
      * -> set select column,
      * if null, then auto set to all (*)
      *
@@ -130,7 +121,7 @@ class QueryBuilderService
 
     /**
      * Set from (base table)
-     * 
+     *
      * -> set base table query, ! must be included
      *
      * @param string $from
@@ -145,7 +136,7 @@ class QueryBuilderService
 
     /**
      * Set join (inner)
-     * 
+     *
      * -> set inner join from query
      *
      * @param string $relationTable
@@ -165,7 +156,7 @@ class QueryBuilderService
 
     /**
      * Set where clouse
-     * 
+     *
      * -> set where clause from query
      *
      * @param string $column
@@ -184,7 +175,7 @@ class QueryBuilderService
 
     /**
      * Set OR Where
-     * 
+     *
      * -> set or where clause from query
      *
      * @param string $column
@@ -196,14 +187,14 @@ class QueryBuilderService
     {
         $resolve = self::orWhereResolver($column, $sign, $value);
 
-        self::$where .= $resolve;
+        self::$andOrWhere .= $resolve;
 
         return new self;
     }
 
     /**
      * Set AND Where
-     * 
+     *
      * -> set and where clause from query
      *
      * @param string $column
@@ -215,7 +206,7 @@ class QueryBuilderService
     {
         $resolve = self::andWhereResolver($column, $sign, $value);
 
-        self::$where .= $resolve;
+        self::$andOrWhere .= $resolve;
 
         return new self;
     }
