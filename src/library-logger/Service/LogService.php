@@ -16,13 +16,14 @@ use Laminas\Log\Logger;
  * :: setMode('default')
  *
  * :: setMessage('default')
- * 
+ *
  * :: log()
  */
 class LogService
 {
     protected static $channel;
     protected static $mode;
+    protected static $title;
     protected static $message;
 
     /**
@@ -117,7 +118,9 @@ class LogService
      */
     private static function messageResolver(): string
     {
-        return static::$message;
+        $_message = json_encode(static::$message);
+        if (static::$title) $_message = static::$title . ": " . $_message;
+        return $_message;
     }
 
     /**
@@ -149,7 +152,7 @@ class LogService
     // ? Setter Module
     /**
      * Set value of channel.
-     * 
+     *
      * -> select channel, available [ emerg, alert, crit, err, warn, notice, info ],
      * if null then auto set to default.
      *
@@ -165,7 +168,7 @@ class LogService
 
     /**
      * Set value of mode.
-     * 
+     *
      * -> select log mode, available [ test, debug, develop ],
      * if null then auto set to default.
      *
@@ -180,15 +183,31 @@ class LogService
     }
 
     /**
+     * Set the value of title
+     *
+     * -> set title for log,
+     * if null then there is no title for log
+     *
+     * @param string $title
+     * @return self
+     */
+    public static function setTitle(string $title = ''): self
+    {
+        self::$title = $title;
+
+        return new self;
+    }
+
+    /**
      * Set value of message
-     * 
+     *
      * -> set log message,
      * if null then auto set to default message.
      *
-     * @param string $message
+     * @param mixed $message
      * @return self
      */
-    public static function setMessage(string $message = self::DEFAULT_MESSAGE): self
+    public static function setMessage($message = self::DEFAULT_MESSAGE): self
     {
         self::$message = $message;
 
