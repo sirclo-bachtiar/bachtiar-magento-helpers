@@ -9,15 +9,15 @@ use Laminas\Log\Logger;
  * Logging Activity Service
  *
  * :: how to use
- * => LogService::setChannel('default')->setMode('default')->setMessage('message_to_log')->log();
+ * => LogService::channel('default')->mode('default')->title('log_title')->message('message_to_log');
  *
- * :: setChannel('default')
+ * :: channel('default')
  *
- * :: setMode('default')
+ * :: mode('default')
  *
- * :: setMessage('default')
+ * :: title('default')
  *
- * :: log()
+ * :: message('default')
  */
 class LogService
 {
@@ -27,7 +27,7 @@ class LogService
     protected static $message;
 
     /**
-     * Change the value of BASE_DIR on line 34,
+     * Change the value of BASE_DIR on line 35,
      * adjust to the location where your logs are stored.
      * you can use [ define() ] at [ autoload ] file,
      * default [ dirname(__DIR__) ].
@@ -55,16 +55,37 @@ class LogService
     private const FILE_DEBUG = 'debug';
     private const FILE_DEVELOP = 'develop';
 
+    private const DEFAULT_TITLE = 'new log';
     private const DEFAULT_MESSAGE = 'log test successfully';
+
+    private const CHANNEL_AVAILABLE = [
+        'emerg' => self::CHANNEL_EMERGENCY,
+        'alert' => self::CHANNEL_ALERT,
+        'crit' => self::CHANNEL_CRITICAL,
+        'err' => self::CHANNEL_ERROR,
+        'warn' => self::CHANNEL_WARNING,
+        'notice' => self::CHANNEL_NOTICE,
+        'info' => self::CHANNEL_INFO,
+        'debug' => self::CHANNEL_DEBUG
+    ];
+
+    private const MODE_AVAILABLE = [
+        'test' => self::FILE_TEST,
+        'debug' => self::FILE_DEBUG,
+        'develop' => self::FILE_DEVELOP,
+        'default' => self::FILE_DEFAULT
+    ];
 
     // ? Public Methods
     /**
-     * create log process
+     * set log message
      *
      * @return void
      */
-    public static function log(): void
+    public static function message($message = self::DEFAULT_MESSAGE): void
     {
+        self::$message = $message;
+
         self::createNewLog();
     }
 
@@ -92,22 +113,11 @@ class LogService
     {
         $getChannel = static::$channel ?? 'debug';
 
-        $channelAvailable = [
-            'emerg' => static::CHANNEL_EMERGENCY,
-            'alert' => static::CHANNEL_ALERT,
-            'crit' => static::CHANNEL_CRITICAL,
-            'err' => static::CHANNEL_ERROR,
-            'warn' => static::CHANNEL_WARNING,
-            'notice' => static::CHANNEL_NOTICE,
-            'info' => static::CHANNEL_INFO,
-            'debug' => static::CHANNEL_DEBUG
-        ];
-
         try {
-            return $channelAvailable[$getChannel];
+            return self::CHANNEL_AVAILABLE[$getChannel];
         } catch (\Throwable $th) {
             echo $th->getMessage();
-            return $channelAvailable['debug'];
+            return self::CHANNEL_AVAILABLE['debug'];
         }
     }
 
@@ -118,8 +128,10 @@ class LogService
      */
     private static function messageResolver(): string
     {
-        $_message = json_encode(static::$message);
+        $_message = json_encode(self::$message);
+
         if (static::$title) $_message = static::$title . ": " . $_message;
+
         return $_message;
     }
 
@@ -132,18 +144,11 @@ class LogService
     {
         $getMode = static::$mode ?? 'default';
 
-        $modeAvailable = [
-            'test' => static::FILE_TEST,
-            'debug' => static::FILE_DEBUG,
-            'develop' => static::FILE_DEVELOP,
-            'default' => static::FILE_DEFAULT
-        ];
-
         try {
-            $modeResult = $modeAvailable[$getMode];
+            $modeResult = self::MODE_AVAILABLE[$getMode];
         } catch (\Throwable $th) {
             echo $th->getMessage();
-            $modeResult = $modeAvailable['default'];
+            $modeResult = self::MODE_AVAILABLE['default'];
         }
 
         return (string) static::LOCATION . static::IDENTITY . $modeResult . static::FILEFORMAT;
@@ -159,7 +164,7 @@ class LogService
      * @param string $channel
      * @return self
      */
-    public static function setChannel(string $channel = 'debug'): self
+    public static function channel(string $channel = 'debug'): self
     {
         self::$channel = $channel;
 
@@ -175,7 +180,7 @@ class LogService
      * @param string $mode
      * @return self
      */
-    public static function setMode(string $mode = 'default'): self
+    public static function mode(string $mode = 'default'): self
     {
         self::$mode = $mode;
 
@@ -191,25 +196,9 @@ class LogService
      * @param string $title
      * @return self
      */
-    public static function setTitle(string $title = ''): self
+    public static function title(string $title = self::DEFAULT_TITLE): self
     {
         self::$title = $title;
-
-        return new self;
-    }
-
-    /**
-     * Set value of message
-     *
-     * -> set log message,
-     * if null then auto set to default message.
-     *
-     * @param mixed $message
-     * @return self
-     */
-    public static function setMessage($message = self::DEFAULT_MESSAGE): self
-    {
-        self::$message = $message;
 
         return new self;
     }

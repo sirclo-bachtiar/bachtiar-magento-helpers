@@ -22,25 +22,25 @@ class LogTest
 {
     public function Log()
     {
-        return LogService::setChannel('alert')
-            ->setMode('debug')
-            ->setMessage('message debug alert')
-            ->log();
+        return LogService::channel('default')
+            ->mode('default')
+            ->title('log_title')
+            ->message('message_to_log');
     }
 }
 
 #### Info ####
-:: setChannel('default')
+:: channel('default')
     -> select channel, available [ emerg, alert, crit, err, warn, notice, info ], if null then auto set to default.
 
-:: setMode('default')
+:: mode('default')
     -> select log mode, available [ test, debug, develop ], if null then auto set to default.
 
-:: setMessage('default')
-    -> set log message, if null then auto set to default message.
+:: title('default')
+    -> set log title, if null then auto set to default title.
 
-:: log()
-    -> process to create log.
+:: message('default')
+    -> set log message, if null then auto set to default message.
 
 ```
 

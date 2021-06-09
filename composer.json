@@ -1,7 +1,7 @@
 {
     "name": "sirclo-bachtiar/bachtiar-magento-helpers",
     "description": "Bachtiar Magento Helpers",
-    "version": "3.0.2",
+    "version": "3.1.0",
     "type": "library",
     "license": "GPL-3.0",
     "authors": [

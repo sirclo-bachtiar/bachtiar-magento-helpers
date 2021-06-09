@@ -8,6 +8,6 @@ class LogTest
 {
     public function __invoke()
     {
-        return LogService::setChannel('alert')->setMode('debug')->setMessage('message debug alert')->log();
+        return LogService::channel('default')->mode('default')->title('log_title')->message('message_to_log');
     }
 }
