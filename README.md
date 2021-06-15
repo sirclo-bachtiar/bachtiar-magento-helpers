@@ -9,7 +9,7 @@ This library requiring **[Laminas Log](https://github.com/laminas/laminas-log)**
 ## Installation
 
 ```bash
-composer require sirclo-bachtiar/bachtiar-magento-helpers
+composer require sirclo-bachtiar/magento-helpers
 ```
 
 ## Usage

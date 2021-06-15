@@ -101,7 +101,11 @@ class LogService
 
         $logger = new Logger;
 
-        $logger->addWriter($writer)->log(self::channelResolver(), self::messageResolver());
+        try {
+            $logger->addWriter($writer)->log(self::channelResolver(), self::messageResolver());
+        } catch (\Throwable $th) {
+            $logger->addWriter($writer)->log(self::CHANNEL_AVAILABLE['debug'], $th->getMessage());
+        }
     }
 
     /**
@@ -116,7 +120,7 @@ class LogService
         try {
             return self::CHANNEL_AVAILABLE[$getChannel];
         } catch (\Throwable $th) {
-            echo $th->getMessage();
+            self::$message .= $th->getMessage();
             return self::CHANNEL_AVAILABLE['debug'];
         }
     }
@@ -128,11 +132,15 @@ class LogService
      */
     private static function messageResolver(): string
     {
-        $_message = json_encode(self::$message);
+        try {
+            $_message = json_encode(self::$message);
 
-        if (static::$title) $_message = static::$title . ": " . $_message;
+            if (static::$title) $_message = static::$title . ": " . $_message;
 
-        return $_message;
+            return $_message;
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     }
 
     /**
